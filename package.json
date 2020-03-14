@@ -1,0 +1,19 @@
+{
+  "name": "know-more",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jamesbeamie/KnowMore-API.git"
+  },
+  "author": "James Wafula",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jamesbeamie/KnowMore-API/issues"
+  },
+  "homepage": "https://github.com/jamesbeamie/KnowMore-API#readme"
+}
