@@ -1,3 +1,5 @@
+# Badges
+- CI
 # KnowMore-API
 - Its an API for a blog website
 - Authenticated Users can create Content
