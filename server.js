@@ -1,8 +1,18 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const path = require("path");
 
 // Initialize app
 const app = express();
+
+// Connecting to mongoDB
+
+mongoose.connect("mongodb://localhost/blogDB", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
+let db = mongoose.connection;
 
 // Pass in the folder that will keep the view
 app.set("views", path.join(__dirname, "views"));
