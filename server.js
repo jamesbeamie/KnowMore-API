@@ -2,6 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 
+// Models
+let Post = require("./models/Posts");
+console.log("Postsss", Post);
 // Initialize app
 const app = express();
 
@@ -13,6 +16,16 @@ mongoose.connect("mongodb://localhost/blogDB", {
 });
 
 let db = mongoose.connection;
+// Check connection success
+db.on("open", () => {
+  console.log("Connected to MongoDB");
+});
+
+// Check connection errors
+
+db.on("error", err => {
+  console.log(err);
+});
 
 // Pass in the folder that will keep the view
 app.set("views", path.join(__dirname, "views"));
@@ -21,29 +34,15 @@ app.set("view engine", "pug");
 
 // Home Route
 app.get("/", (req, res) => {
-  let postsArray = [
-    {
-      id: 1,
-      title: "first",
-      author: "James",
-      body: "The article"
-    },
-    {
-      id: 2,
-      title: "firs",
-      author: "James",
-      body: "The article"
-    },
-    {
-      id: 3,
-      title: "firs",
-      author: "James",
-      body: "The article"
+  Post.find({}, (err, postsArray) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render("index", {
+        title: "Hello",
+        posts: postsArray
+      });
     }
-  ];
-  res.render("index", {
-    title: "Hello",
-    posts: postsArray
   });
 });
 
