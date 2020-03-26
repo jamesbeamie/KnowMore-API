@@ -6,14 +6,12 @@ const bodyParser = require("body-parser");
 require("dotenv/config");
 
 const app = express();
+app.use(bodyParser.json());
 
 // routes
 const postsRoutes = require("./Routes/post");
 
 app.use("/people", postsRoutes);
-app.use(bodyParser.json());
-
-// db connection
 
 // server
 mongoose
