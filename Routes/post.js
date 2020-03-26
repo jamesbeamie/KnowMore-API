@@ -3,8 +3,13 @@ const express = require("express");
 const router = express.Router();
 const Post = require("../models/Posts");
 
-router.get("/", (req, res) => {
-  res.send("mUMSDLKNSL KDSN");
+router.get("/", async (req, res) => {
+  try {
+    const posts = await Post.find();
+    res.json(posts);
+  } catch (err) {
+    res.json({ message: `sorry the errow :${err} occured` });
+  }
 });
 
 router.post("/add", async (req, res) => {
@@ -19,6 +24,15 @@ router.post("/add", async (req, res) => {
     res.json(savePost);
   } catch (err) {
     res.json({ message: "Error posting" });
+  }
+});
+
+router.get("/:postId", async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.postId);
+    res.json(post);
+  } catch (err) {
+    res.json({ message: `sorry :${req.params.postId} was not found` });
   }
 });
 
