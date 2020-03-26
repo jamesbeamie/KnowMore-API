@@ -3,10 +3,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 require("dotenv/config");
 
 const app = express();
+
+//middlewares
 app.use(bodyParser.json());
+app.use(cors());
 
 // routes
 const postsRoutes = require("./Routes/post");
