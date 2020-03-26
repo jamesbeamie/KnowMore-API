@@ -20,7 +20,10 @@ app.use("/people", postsRoutes);
 // server
 mongoose
   .connect(
-    `mongodb+srv://james:glJOadOY0ALfbR06@cluster0-fhwxu.mongodb.net/homes-dev-db?retryWrites=true&w=majority`,
+    // atlas
+    // `mongodb+srv://james:glJOadOY0ALfbR06@cluster0-fhwxu.mongodb.net/homes-dev-db?retryWrites=true&w=majority`,
+    //local DB
+    `mongodb://localhost/postsDB`,
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => {
