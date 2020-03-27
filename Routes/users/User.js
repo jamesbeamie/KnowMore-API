@@ -4,6 +4,16 @@ const bcrypt = require("bcrypt");
 
 const User = require("../../models/users/User");
 
+const validEmail = email => {
+  let regx = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return regx.test(email);
+};
+
+const validPwd = pwd => {
+  var re = /^(?=.*[a-z]){3,}(?=.*[A-Z]){2,}(?=.*[0-9]){2,}(?=.*[!@#$%^&*()--__+.]){1,}.{8,}$/;
+  return re.test(pwd);
+};
+
 // creating user
 router.post("/signup", async (req, res) => {
   const { username, email, password } = req.body;
@@ -12,22 +22,28 @@ router.post("/signup", async (req, res) => {
     if (exists.length >= 1) {
       return res.status(422).json({ message: "email already used" });
     } else {
-      hashedPwd = await bcrypt.hash(password, 12, (err, hash) => {
-        if (err) {
-          return res.status(500).json({
-            message: `the error :${err}`
-          });
-        } else {
-          const newUser = new User({
-            username,
-            email,
-            password: hash
-          });
+      if (validPwd(password) && validEmail(email)) {
+        hashedPwd = await bcrypt.hash(password, 12, (err, hash) => {
+          if (err) {
+            return res.status(500).json({
+              message: `the error :${err}`
+            });
+          } else {
+            const newUser = new User({
+              username,
+              email,
+              password: hash
+            });
 
-          newUser.save();
-          res.status(201).json({ savedUser: newUser, message: "Created" });
-        }
-      });
+            newUser.save();
+            res.status(201).json({ savedUser: newUser, message: "Created" });
+          }
+        });
+      } else {
+        return res.status(500).json({
+          message: `Email must be of the formart example@email.com and pwd with more than 8 charactors, capital letter, small letters numbers and special charactors`
+        });
+      }
     }
   } catch (err) {
     res.status(400);
@@ -50,8 +66,7 @@ router.get("/:userId", async (req, res) => {
   try {
     const exists = await User.findById(req.params.userId);
     if (exists) {
-      const user = await User.findById(req.params.userId);
-      res.json(user);
+      res.json(exists);
     } else {
       res.json({ message: `sorry user was not found` });
     }
@@ -60,7 +75,7 @@ router.get("/:userId", async (req, res) => {
   }
 });
 
-// Edit User profile
+// Edit User
 router.patch("/:userId", async (req, res) => {
   try {
     const { username, email, password } = req.body;
