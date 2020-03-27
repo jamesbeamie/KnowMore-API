@@ -6,7 +6,8 @@ require("dotenv/config");
 
 //module imports
 // routes imports
-const postsRoutes = require("./Routes/post");
+const postsRoutes = require("./Routes/posts/post");
+const userRoutes = require("./Routes/users/User");
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(cors());
 
 // routes
 app.use("/people", postsRoutes);
+app.use("/users", userRoutes);
 
 // server
 mongoose
