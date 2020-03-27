@@ -41,7 +41,7 @@ router.post("/signup", async (req, res) => {
         });
       } else {
         return res.status(500).json({
-          message: `Email must be of the formart example@email.com and pwd with more than 8 charactors, capital letter, small letters numbers and special charactors`
+          message: `Email must be of the formart example@email.com and pwd  atleast1numberspeci@lcharactorandCapital`
         });
       }
     }
