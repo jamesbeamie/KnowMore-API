@@ -2,6 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 const Post = require("../../models/posts/Posts");
+const checkAuthentication = require("../../middlewares/AuthMiddleware");
 
 // Get all posts
 router.get("/", async (req, res) => {
@@ -14,7 +15,7 @@ router.get("/", async (req, res) => {
 });
 
 // add a post
-router.post("/add", async (req, res) => {
+router.post("/add", checkAuthentication, async (req, res) => {
   const newPost = new Post({
     title: req.body.title,
     author: req.body.author,
@@ -40,7 +41,7 @@ router.get("/:postId", async (req, res) => {
 });
 
 //delete a post
-router.delete("/:postId", async (req, res) => {
+router.delete("/:postId", checkAuthentication, async (req, res) => {
   try {
     const exists = await Post.findById(req.params.postId);
     if (exists) {
@@ -55,7 +56,7 @@ router.delete("/:postId", async (req, res) => {
 });
 
 // Edit Post
-router.patch("/:postId", async (req, res) => {
+router.patch("/:postId", checkAuthentication, async (req, res) => {
   try {
     const exists = await Post.findById(req.params.postId);
     if (exists) {
