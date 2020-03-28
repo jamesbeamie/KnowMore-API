@@ -6,19 +6,20 @@ require("dotenv/config");
 
 //module imports
 // routes imports
-const postsRoutes = require("./Routes/posts/post");
+const devicesRoutes = require("./Routes/Devices/devices");
 const userRoutes = require("./Routes/users/registration/User");
 const loginRoutes = require("./Routes/users/login/Login");
 
 const app = express();
 
 //middlewares
+app.use("/uploads", express.static("uploads"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
 // routes
-app.use("/people", postsRoutes);
+app.use("/devices", devicesRoutes);
 app.use("/users", userRoutes);
 app.use("/auth", loginRoutes);
 
