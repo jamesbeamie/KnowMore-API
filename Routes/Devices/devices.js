@@ -22,7 +22,7 @@ router.post(
   checkAuthentication,
   async (req, res) => {
     console.log(req.file);
-    const { name, model, size, color, productionYear, price } = req.body;
+    const { name, model, size, color, productionYear, price, tags } = req.body;
     const newDevice = new Device({
       name,
       model,
@@ -30,7 +30,8 @@ router.post(
       color,
       productionYear,
       price,
-      deviceImage: req.file.path
+      deviceImage: req.file.path,
+      tags
     });
 
     try {
@@ -44,11 +45,16 @@ router.post(
 
 // get a specific device
 router.get("/:deviceId", async (req, res) => {
+  const theId = req.params.deviceId;
   try {
-    const device = await Device.findById(req.params.deviceId);
-    res.json(device);
+    const device = await Device.findById(theId);
+    if (device) {
+      res.json(device);
+    } else {
+      res.status(404).json({ message: `${theId} not found` });
+    }
   } catch (err) {
-    res.json({ message: `sorry :${req.params.deviceId} was not found` });
+    res.json({ message: `sorry :${theId} was not found` });
   }
 });
 
@@ -68,26 +74,46 @@ router.delete("/:deviceId", checkAuthentication, async (req, res) => {
 });
 
 // Edit device
-router.patch("/:deviceId", checkAuthentication, async (req, res) => {
-  try {
-    const exists = await Device.findById(req.params.deviceId);
-    if (exists) {
-      const editedDevice = await Device.updateOne(
-        { _id: req.params.deviceId },
-        {
-          $set: {
-            title: req.body.title,
-            author: req.body.author,
-            body: req.body.body
+router.patch(
+  "/:deviceId",
+  uploadImage.single("deviceImage"),
+  checkAuthentication,
+  async (req, res) => {
+    try {
+      const exists = await Device.findById(req.params.deviceId);
+      if (exists) {
+        const {
+          name,
+          model,
+          size,
+          color,
+          productionYear,
+          price,
+          tags
+        } = req.body;
+        console.log("ma-tag", tags);
+        const editedDevice = await Device.updateOne(
+          { _id: req.params.deviceId },
+          {
+            $set: {
+              name,
+              model,
+              size,
+              color,
+              productionYear,
+              price,
+              deviceImage: req.file.path,
+              tags
+            }
           }
-        }
-      );
-      res.json({ editedDevice, message: "Edited" });
-    } else {
-      res.json({ message: `sorry :${req.params.deviceId} was not found` });
+        );
+        res.json({ editedDevice, message: "Edited" });
+      } else {
+        res.json({ message: `sorry :${req.params.deviceId} was not found` });
+      }
+    } catch (err) {
+      res.json({ message: `Error Editing :${req.params.deviceId}` });
     }
-  } catch (err) {
-    res.json({ message: `Error Editing :${req.params.deviceId}` });
   }
-});
+);
 module.exports = router;

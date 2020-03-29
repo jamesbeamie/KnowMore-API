@@ -30,7 +30,8 @@ let postSchema = mongoose.Schema({
   deviceImage: {
     type: String,
     require: true
-  }
+  },
+  tags: [{ type: String, require: true }]
 });
 
 module.exports = mongoose.model("Device", postSchema);
