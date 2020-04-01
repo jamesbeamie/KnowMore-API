@@ -1,8 +1,9 @@
 let mongoose = require("mongoose");
 
 // Posts Schema
+const Schema = mongoose.Schema;
 
-let postSchema = mongoose.Schema({
+let postSchema = new Schema({
   name: {
     type: String,
     required: true
