@@ -35,19 +35,20 @@ router.post('/:deviceId/dislike', async(req, res) => {
             throw new Error('Bad request')
         }
         // find device
-        let device = await Device.findById(req.params.id)
+        let device = await Device.findById(req.params.deviceId)
         if(!device) {
             throw new Error('Device not found')
         }
 
         // update dislikes
         updatedDislikes = device.dislikes + 1
-        Device.findByIdAndUpdate(req.params.deviceId,{likes: updatedDislikes})
+        device.dislikes = updatedDislikes
+        await device.save()
         
         res.json({
             success: true,
-            message: disliked,
-            likes: updatedDislikes
+            message: 'disliked',
+            dislikes: updatedDislikes
         })
     } catch (error) {
         res.json({
@@ -63,19 +64,19 @@ router.post('/:deviceId/remove-dislike', async(req, res) => {
             throw new Error('Bad request')
         }
         // find device
-        let device = await Device.findById(req.params.id)
+        let device = await Device.findById(req.params.deviceId)
         if(!device) {
             throw new Error('Device not found')
         }
 
         // update dislikes
         let updatedDislikes = device.dislikes - 1
-        Device.findByIdAndUpdate(req.params.deviceId,{likes: updatedDislikes})
-        
+        device.dislikes = updatedDislikes
+        await device.save()        
         res.json({
             success: true,
             message: 'removed dislike',
-            likes: updatedDislikes
+            dislikes: updatedDislikes
         })
     } catch (error) {
         res.json({
