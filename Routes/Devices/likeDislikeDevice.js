@@ -70,7 +70,7 @@ router.post('/:deviceId/remove-dislike', async(req, res) => {
         }
 
         // update dislikes
-        if(device.dislikes<0) {
+        if(device.dislikes<=0) { // shouldn't decrement dislikes if dislikes are zero or below zero
             throw new Error('There are no dislikes to remove')
         }
         let updatedDislikes = device.dislikes - 1
