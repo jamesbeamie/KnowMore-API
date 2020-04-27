@@ -1,33 +1,6 @@
 const router = require('express').Router()
 const Device = require('../../models/devices/DevicesModel')
 
-// // like 
-// router.post('/:deviceId/like', async(req, res) => {
-//     try {
-//         if(!req.body.like) {
-//             throw new Error('Bad request')
-//         }
-//         // find device
-//         let device = await Device.findById(req.params.deviceId)
-//         if(!device) {
-//             throw new Error('Device not found')
-//         }
-
-//         // update likes
-//         let updatedLikes = device.likes + 1
-//         Device.findByIdAndUpdate(req.params.deviceId,{likes: updatedLikes})
-//         res.json({
-//             success: true,
-//             message: 'liked',
-//             likes: updatedLikes
-//         })
-//     } catch (error) {
-//         res.json({
-//             error: error.message
-//         })
-//     }
-// })
-
 // dislike 
 router.post('/:deviceId/dislike', async(req, res) => {
     try {
