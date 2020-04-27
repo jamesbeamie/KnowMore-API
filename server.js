@@ -9,6 +9,7 @@ require("dotenv/config");
 const devicesRoutes = require("./Routes/Devices/devices");
 const userRoutes = require("./Routes/users/registration/User");
 const loginRoutes = require("./Routes/users/login/Login");
+const ratingRoutes = require("./Routes/rating/Rating");
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(cors());
 app.use("/devices", devicesRoutes);
 app.use("/users", userRoutes);
 app.use("/auth", loginRoutes);
+app.use("/rating", ratingRoutes);
 
 // server
 mongoose
@@ -34,9 +36,9 @@ mongoose
   )
   .then(() => {
     console.log("connected");
-    app.listen(`${process.env.PORT}` || 5000);
+    app.listen(`${process.env.PORT}` || 5001);
   })
-  .catch(err => {
-    console.log("Shida");
+  .catch((err) => {
+    console.log("Problem running the server");
     throw err;
   });
