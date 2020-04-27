@@ -7,6 +7,7 @@ require("dotenv/config");
 //module imports
 // routes imports
 const devicesRoutes = require("./Routes/Devices/devices");
+const actionRoutes =  require('./Routes/Devices/likeDislikeDevice')
 const userRoutes = require("./Routes/users/registration/User");
 const loginRoutes = require("./Routes/users/login/Login");
 const ratingRoutes = require("./Routes/rating/Rating");
@@ -24,6 +25,7 @@ app.use("/devices", devicesRoutes);
 app.use("/users", userRoutes);
 app.use("/auth", loginRoutes);
 app.use("/rating", ratingRoutes);
+app.use('/devices/action', actionRoutes)
 
 // server
 mongoose
