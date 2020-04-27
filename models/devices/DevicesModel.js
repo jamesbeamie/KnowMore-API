@@ -3,7 +3,7 @@ let mongoose = require("mongoose");
 // Posts Schema
 const Schema = mongoose.Schema;
 
-let postSchema = new Schema({
+let deviceSchema = new Schema({
   name: {
     type: String,
     required: true
@@ -35,4 +35,5 @@ let postSchema = new Schema({
   tags: [{ type: String, require: true }]
 });
 
-module.exports = mongoose.model("Device", postSchema);
+
+module.exports = mongoose.model("Device", deviceSchema);
