@@ -3,7 +3,7 @@ let mongoose = require("mongoose");
 // Posts Schema
 const Schema = mongoose.Schema;
 
-let postSchema = new Schema({
+let deviceSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -33,9 +33,16 @@ let postSchema = new Schema({
     require: true,
   },
   tags: [{ type: String, require: true }],
-  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Likes" }],
-  dislikes: [{ type: mongoose.Schema.Types.ObjectId, ref: "DisLikes" }],
   reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
+  likes: {
+    type: Number,
+    default: 0
+  },
+  dislikes: {
+    type: Number,
+    default: 0
+  }
 });
 
-module.exports = mongoose.model("Device", postSchema);
+
+module.exports = mongoose.model("Device", deviceSchema);
