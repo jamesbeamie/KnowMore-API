@@ -36,13 +36,12 @@ let deviceSchema = new Schema({
   reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
   likes: {
     type: Number,
-    default: 0
+    default: 0,
   },
   dislikes: {
     type: Number,
-    default: 0
-  }
+    default: 0,
+  },
 });
-
 
 module.exports = mongoose.model("Device", deviceSchema);
