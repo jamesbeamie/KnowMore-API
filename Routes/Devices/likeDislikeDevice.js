@@ -61,5 +61,28 @@ router.post(
   }
 );
 
+// likes
+router.post("/like/:deviceId", checkAuthentication, async (req, res) => {
+  const deviceExists = await Device.findById(req.params.deviceId);
+  if (deviceExists) {
+    try {
+      like = deviceExists.likes + 1;
+      deviceExists.likes = like;
+      await deviceExists.save();
+
+      res.status(200).json({
+        message: "You like this device",
+        likes: like,
+      });
+    } catch (error) {
+      res.status(400).json({
+        message: "Problem liking this device",
+      });
+    }
+  } else {
+    res.json({ message: "Device not found" });
+  }
+});
+
 // export router
 module.exports = router;
