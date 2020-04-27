@@ -1,8 +1,9 @@
 const router = require('express').Router()
 const Device = require('../../models/devices/DevicesModel')
+const checkAuthentication = require("../../middlewares/AuthMiddleware");
 
 // dislike 
-router.post('/:deviceId/dislike', async(req, res) => {
+router.post('/:deviceId/dislike', checkAuthentication, async(req, res) => {
     try {
         // find device
         let device = await Device.findById(req.params.deviceId)
@@ -28,7 +29,7 @@ router.post('/:deviceId/dislike', async(req, res) => {
 })
 
 // remove dislike - when a user "unclicks" the dislike button
-router.post('/:deviceId/remove-dislike', async(req, res) => {
+router.post('/:deviceId/remove-dislike', checkAuthentication, async(req, res) => {
     try {
         // find device
         let device = await Device.findById(req.params.deviceId)
