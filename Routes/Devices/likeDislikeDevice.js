@@ -76,7 +76,7 @@ router.post("/like/:deviceId", checkAuthentication, async (req, res) => {
       });
     } catch (error) {
       res.status(400).json({
-        error: error.message,
+        message: "Problem liking this device",
       });
     }
   } else {
