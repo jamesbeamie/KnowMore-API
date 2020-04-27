@@ -11,6 +11,7 @@ const actionRoutes =  require('./Routes/Devices/likeDislikeDevice')
 const userRoutes = require("./Routes/users/registration/User");
 const loginRoutes = require("./Routes/users/login/Login");
 const ratingRoutes = require("./Routes/rating/Rating");
+const likeDislikeRoutes = require("./Routes/likesDislikes/likesDislikeRoutes");
 
 const app = express();
 
