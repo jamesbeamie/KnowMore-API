@@ -28,7 +28,6 @@ router.post("/:deviceId", authMiddleware, async (req, res) => {
 });
 
 //delete a review
-
 router.delete("/:reviewId", authMiddleware, async (req, res) => {
   const reviewExists = await Review.findById(req.params.reviewId);
   if (reviewExists) {
