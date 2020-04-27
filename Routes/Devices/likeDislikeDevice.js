@@ -71,7 +71,7 @@ router.post("/like/:deviceId", checkAuthentication, async (req, res) => {
       await deviceExists.save();
 
       res.status(200).json({
-        message: "You liked the device",
+        message: "You like this device",
         likes: like,
       });
     } catch (error) {
