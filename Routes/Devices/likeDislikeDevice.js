@@ -31,9 +31,6 @@ const Device = require('../../models/devices/DevicesModel')
 // dislike 
 router.post('/:deviceId/dislike', async(req, res) => {
     try {
-        if(!req.body.dislike) {
-            throw new Error('Bad request')
-        }
         // find device
         let device = await Device.findById(req.params.deviceId)
         if(!device) {
@@ -60,9 +57,6 @@ router.post('/:deviceId/dislike', async(req, res) => {
 // remove dislike - when a user "unclicks" the dislike button
 router.post('/:deviceId/remove-dislike', async(req, res) => {
     try {
-        if(!req.body.dislike) {
-            throw new Error('Bad request')
-        }
         // find device
         let device = await Device.findById(req.params.deviceId)
         if(!device) {
