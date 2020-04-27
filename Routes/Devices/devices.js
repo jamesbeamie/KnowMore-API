@@ -8,7 +8,7 @@ const uploadImage = require("../../middlewares/ImageUploader");
 // Get all devices
 router.get("/", async (req, res) => {
   try {
-    const devices = await Device.find();
+    const devices = await Device.find().populate("likes ");
     res.json(devices);
   } catch (err) {
     res.json({ message: `sorry the errow :${err} occured` });
@@ -31,7 +31,7 @@ router.post(
       productionYear,
       price,
       deviceImage: req.file.path,
-      tags
+      tags,
     });
 
     try {
@@ -47,7 +47,7 @@ router.post(
 router.get("/:deviceId", async (req, res) => {
   const theId = req.params.deviceId;
   try {
-    const device = await Device.findById(theId);
+    const device = await Device.findById(theId).populate("likes ");
     if (device) {
       res.json(device);
     } else {
@@ -62,6 +62,7 @@ router.get("/:deviceId", async (req, res) => {
 router.delete("/:deviceId", checkAuthentication, async (req, res) => {
   try {
     const exists = await Device.findById(req.params.deviceId);
+    console.log("^&***(&*&", exists);
     if (exists) {
       const deletedDevice = await Device.remove({ _id: req.params.deviceId });
       res.json({ devices: deletedDevice, message: "deleted" });
@@ -79,9 +80,9 @@ router.patch(
   uploadImage.single("deviceImage"),
   checkAuthentication,
   async (req, res) => {
-    try {
-      const exists = await Device.findById(req.params.deviceId);
-      if (exists) {
+    const exists = await Device.findById(req.params.deviceId);
+    if (exists) {
+      try {
         const {
           name,
           model,
@@ -89,9 +90,9 @@ router.patch(
           color,
           productionYear,
           price,
-          tags
+          tags,
         } = req.body;
-        console.log("ma-tag", tags);
+        console.log("matag", req.file.path);
         const editedDevice = await Device.updateOne(
           { _id: req.params.deviceId },
           {
@@ -103,16 +104,17 @@ router.patch(
               productionYear,
               price,
               deviceImage: req.file.path,
-              tags
-            }
+              tags,
+            },
           }
         );
         res.json({ editedDevice, message: "Edited" });
-      } else {
-        res.json({ message: `sorry :${req.params.deviceId} was not found` });
+      } catch (err) {
+        console.log(err);
+        res.json({ message: `Error Editing :${req.params.deviceId}` });
       }
-    } catch (err) {
-      res.json({ message: `Error Editing :${req.params.deviceId}` });
+    } else {
+      res.json({ message: `sorry :${req.params.deviceId} was not found` });
     }
   }
 );
