@@ -8,7 +8,7 @@ const uploadImage = require("../../middlewares/ImageUploader");
 // Get all devices
 router.get("/", async (req, res) => {
   try {
-    const devices = await Device.find().populate("likes reviews");
+    const devices = await Device.find().populate(" reviews");
     res.json(devices);
   } catch (err) {
     res.json({ message: `sorry the errow :${err} occured` });
@@ -47,7 +47,7 @@ router.post(
 router.get("/:deviceId", async (req, res) => {
   const theId = req.params.deviceId;
   try {
-    const device = await Device.findById(theId).populate("likes reviews");
+    const device = await Device.findById(theId).populate(" reviews");
     if (device) {
       res.json(device);
     } else {
