@@ -15,13 +15,13 @@ router.post('/:deviceId/dislike', async(req, res) => {
         device.dislikes = updatedDislikes
         await device.save()
         
-        res.json({
+        res.status(200).json({
             success: true,
             message: 'disliked',
             dislikes: updatedDislikes
         })
     } catch (error) {
-        res.json({
+        res.status(400).json({
             error: error.message
         })
     }
@@ -43,13 +43,13 @@ router.post('/:deviceId/remove-dislike', async(req, res) => {
         let updatedDislikes = device.dislikes - 1
         device.dislikes = updatedDislikes
         await device.save()        
-        res.json({
+        res.status(200).json({
             success: true,
             message: 'removed dislike',
             dislikes: updatedDislikes
         })
     } catch (error) {
-        res.json({
+        res.status(400).json({
             error: error.message
         })
     }
