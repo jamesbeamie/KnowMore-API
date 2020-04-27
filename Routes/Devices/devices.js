@@ -8,7 +8,7 @@ const uploadImage = require("../../middlewares/ImageUploader");
 // Get all devices
 router.get("/", async (req, res) => {
   try {
-    const devices = await Device.find();
+    const devices = await Device.find().populate("likes reviews");
     res.json(devices);
   } catch (err) {
     res.json({ message: `sorry the errow :${err} occured` });
@@ -47,7 +47,7 @@ router.post(
 router.get("/:deviceId", async (req, res) => {
   const theId = req.params.deviceId;
   try {
-    const device = await Device.findById(theId);
+    const device = await Device.findById(theId).populate("likes reviews");
     if (device) {
       res.json(device);
     } else {
@@ -62,7 +62,6 @@ router.get("/:deviceId", async (req, res) => {
 router.delete("/:deviceId", checkAuthentication, async (req, res) => {
   try {
     const exists = await Device.findById(req.params.deviceId);
-    console.log("^&***(&*&", exists);
     if (exists) {
       const deletedDevice = await Device.remove({ _id: req.params.deviceId });
       res.json({ devices: deletedDevice, message: "deleted" });
