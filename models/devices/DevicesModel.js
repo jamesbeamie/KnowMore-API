@@ -32,7 +32,16 @@ let deviceSchema = new Schema({
     type: String,
     require: true
   },
-  tags: [{ type: String, require: true }]
+  tags: [{ type: String, require: true }],
+  likes: {
+    type: Number,
+    default: 0
+  },
+  dislikes: {
+    type: Number,
+    default: 0
+  }
+
 });
 
 
