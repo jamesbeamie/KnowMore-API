@@ -10,6 +10,7 @@ const devicesRoutes = require("./Routes/Devices/devices");
 const userRoutes = require("./Routes/users/registration/User");
 const loginRoutes = require("./Routes/users/login/Login");
 const ratingRoutes = require("./Routes/rating/Rating");
+const likeDislikeRoutes = require("./Routes/likesDislikes/likesDislikeRoutes");
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use("/devices", devicesRoutes);
 app.use("/users", userRoutes);
 app.use("/auth", loginRoutes);
 app.use("/rating", ratingRoutes);
+app.use("/liking", likeDislikeRoutes);
 
 // server
 mongoose
