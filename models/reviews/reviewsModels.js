@@ -3,12 +3,12 @@ let mongoose = require("mongoose");
 // Like Schema
 const Schema = mongoose.Schema;
 
-let likeSchema = new Schema({
-  like: {
-    type: Number,
+let reviewSchema = new Schema({
+  review: {
+    type: String,
     required: true,
   },
-  likedAt: {
+  reviewedAt: {
     type: Date,
   },
   device: {
@@ -17,4 +17,4 @@ let likeSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model("Likes", likeSchema);
+module.exports = mongoose.model("Review", reviewSchema);

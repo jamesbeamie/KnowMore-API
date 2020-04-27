@@ -33,6 +33,7 @@ let deviceSchema = new Schema({
     require: true,
   },
   tags: [{ type: String, require: true }],
+  reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
   likes: {
     type: Number,
     default: 0
