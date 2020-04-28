@@ -10,7 +10,7 @@ router.post("/request", async (req, res) => {
   try {
     const { email } = req.body;
     const exists = await User.find({ email });
-    if (exists.length >= 1) {
+    if (exists) {
       const token = jwt.sign({ email }, process.env.JWT_SECRETE_KEY, {
         expiresIn: "1hr",
       });
@@ -29,7 +29,7 @@ router.post("/request", async (req, res) => {
       res.json({ message: "user not found" });
     }
   } catch {
-    res.json({ message: "There was a probblem sending the link" });
+    res.json({ message: "There was a problem sending the link" });
   }
 });
 
