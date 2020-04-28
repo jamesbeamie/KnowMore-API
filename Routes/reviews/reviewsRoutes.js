@@ -27,6 +27,25 @@ router.post("/:deviceId", authMiddleware, async (req, res) => {
   }
 });
 
+// edit review
+router.patch("/:reviewId", async(req, res) => {
+  try {
+    let review = await Review.findById(req.params.reviewId)
+    if(!review) {
+      throw new Error("Review not found")
+    }
+    if(!req.body.review) {
+      throw new Error("Review not sent")
+    }
+    const editedReview = req.body.review
+    review.review = editedReview
+    await review.save()
+    res.status(200).json({ review, message:"Edited review"})
+  } catch (error) {
+    res.status(400).json({ message: "Error editing review"})
+  }
+})
+
 //delete a review
 router.delete("/:reviewId", authMiddleware, async (req, res) => {
   try {
@@ -41,5 +60,4 @@ router.delete("/:reviewId", authMiddleware, async (req, res) => {
     res.json({ message: "Could not delete review" });
   }
 });
-
 module.exports = router;
