@@ -16,7 +16,7 @@ const mailSender = async (emailToSendTo, tkn) => {
     // a link to a front-end route that consumes reset route
     html: `<b>Click the link below to reset your Device Zone's password</b>
     <br>
-    <p>http://localhost:5000/pwdreset/reset/${tkn}</P>
+    <p>${process.env.CLIENT_URL}/pwdreset/reset/${tkn}</P>
     `,
   };
 
