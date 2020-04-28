@@ -35,6 +35,7 @@ router.patch('/:reviewId', async(req, res) => {
       const editedReview = req.body.review
       review.review = editedReview
       await review.save()
+      res.status(200).json({ review, message: 'edited review'})
     } catch (error) {
       res.status(400).json({ message: "Error editing review"})
     }
