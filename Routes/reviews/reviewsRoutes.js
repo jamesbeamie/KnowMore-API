@@ -28,19 +28,21 @@ router.post("/:deviceId", authMiddleware, async (req, res) => {
 });
 
 // edit review
-router.patch('/:reviewId', async(req, res) => {
-  let review = await Review.findById(req.params.reviewId)
-  if(review) {
-    try {
-      const editedReview = req.body.review
-      review.review = editedReview
-      await review.save()
-      res.status(200).json({ review, message: 'edited review'})
-    } catch (error) {
-      res.status(400).json({ message: "Error editing review"})
+router.patch("/:reviewId", async(req, res) => {
+  try {
+    let review = await Review.findById(req.params.reviewId)
+    if(!review) {
+      throw new Error('Review not found')
     }
-  } else {
-    res.status(404).json({ message: "Review not found"})
-  } 
+    if(!req.body.review) {
+      throw new Error('Review not sent')
+    }
+    const editedReview = req.body.review
+    review.review = editedReview
+    await review.save()
+    res.status(200).json({ review, message: 'edited review'})
+  } catch (error) {
+    res.status(400).json({ message: "Error editing review"})
+  }
 })
 module.exports = router;
