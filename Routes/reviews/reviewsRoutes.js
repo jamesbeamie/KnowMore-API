@@ -32,15 +32,15 @@ router.patch("/:reviewId", async(req, res) => {
   try {
     let review = await Review.findById(req.params.reviewId)
     if(!review) {
-      throw new Error('Review not found')
+      throw new Error("Review not found")
     }
     if(!req.body.review) {
-      throw new Error('Review not sent')
+      throw new Error("Review not sent")
     }
     const editedReview = req.body.review
     review.review = editedReview
     await review.save()
-    res.status(200).json({ review, message: 'edited review'})
+    res.status(200).json({ review, message:"Edited review"})
   } catch (error) {
     res.status(400).json({ message: "Error editing review"})
   }
