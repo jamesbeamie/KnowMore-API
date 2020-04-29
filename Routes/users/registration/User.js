@@ -67,7 +67,8 @@ router.post("/signup", async (req, res) => {
         },
         { $set: { verificationTkn: token } }
       );
-      await mailSender(email, token);
+      const linkFor = "activation";
+      await mailSender(email, token, linkFor);
       res.status(201).json({ savedUser: newUser, message: "Created" });
     } else {
       return res.status(500).json({
