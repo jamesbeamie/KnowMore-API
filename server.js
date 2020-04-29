@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const logger = require("morgan")
+const logger = require("morgan");
 require("dotenv/config");
 const passport = require("passport");
 
@@ -14,6 +14,7 @@ const loginRoutes = require("./Routes/users/login/Login");
 const ratingRoutes = require("./Routes/rating/Rating");
 const likeDislikeRoutes = require("./Routes/Devices/likeDislikeDevice");
 const reviewRoutes = require("./Routes/reviews/reviewsRoutes");
+const pwdResetRoutes = require("./Routes/users/pwdReset/passwordReset");
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use("/auth", loginRoutes);
 app.use("/rating", ratingRoutes);
 app.use("/reviews", reviewRoutes);
 app.use("/liking", likeDislikeRoutes);
+app.use("/password-reset", pwdResetRoutes);
 
 // server
 mongoose

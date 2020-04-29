@@ -35,6 +35,9 @@ const userSchema = mongoose.Schema({
       type: String,
     },
   },
+    required: true,
+  },
+  verificationTkn: { type: String },
 });
 
 // hash password before save
