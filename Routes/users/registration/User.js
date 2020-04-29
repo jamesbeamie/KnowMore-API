@@ -97,25 +97,17 @@ router.patch("/:userId", checkAuthentication, async (req, res) => {
     const { username, email, password } = req.body;
     const exists = await User.findById(req.params.userId);
     if (exists) {
-      hashedPwd = await bcrypt.hash(password, 12, (err, hash) => {
-        if (err) {
-          return res.status(500).json({
-            message: `the error :${err}`
-          });
-        } else {
-          User.updateOne(
-            { _id: req.params.userId },
-            {
-              $set: {
-                username,
-                email,
-                password: hash
-              }
-            }
-          );
-          res.status(200).json({ message: "Edited" });
+      User.updateOne(
+        { _id: req.params.userId },
+        {
+          $set: {
+            username,
+            email,
+            password
+          }
         }
-      });
+      );
+      res.status(200).json({ message: "Edited" });
     } else {
       res.json({ message: `sorry, user :${req.params.userId} was not found` });
     }
