@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const logger = require("morgan")
 require("dotenv/config");
+const passport = require("passport");
 
 //module imports
 // routes imports
@@ -17,11 +18,12 @@ const reviewRoutes = require("./Routes/reviews/reviewsRoutes");
 const app = express();
 
 //middlewares
+app.use(passport.initialize());
 app.use("/uploads", express.static("uploads"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
-app.use(logger('dev'))
+app.use(logger("dev"));
 
 // routes
 app.use("/devices", devicesRoutes);
