@@ -19,32 +19,47 @@ const validPwd = pwd => {
 router.post("/signup", async (req, res) => {
   const { username, email, password } = req.body;
   try {
-    const exists = await User.find({ email });
-    if (exists.length >= 1) {
+    // check if user exists
+    let exists = await User.findOne({ email });
+    if (exists) {
       return res.status(422).json({ message: "email already used" });
-    } else {
+    }
+    // check if email matches any other in db
+    exists = await User.findOne({
+      $or: [
+        { "facebook.email": email },
+        { "google.email": email },
+      ],
+    });
+    if (exists) {
+      // add the data to user info
       if (validPwd(password) && validEmail(email)) {
-        hashedPwd = await bcrypt.hash(password, 12, (err, hash) => {
-          if (err) {
-            return res.status(500).json({
-              message: `the error :${err}`
-            });
-          } else {
-            const newUser = new User({
-              username,
-              email,
-              password: hash
-            });
-
-            newUser.save();
-            res.status(201).json({ savedUser: newUser, message: "Created" });
-          }
-        });
+        exists = {
+          username,
+          email,
+          password,
+        };
+        await exists.save();
+        res.status(200).json({ savedUser: exists, message: "User info updated" });
       } else {
         return res.status(500).json({
           message: `Email must be of the formart example@email.com and pwd  atleast1numberspeci@lcharactorandCapital`
         });
       }
+    }
+    // if user does not exist, create
+    if (validPwd(password) && validEmail(email)) {
+      const newUser = new User({
+        username,
+        email,
+        password,
+      });
+      await newUser.save();
+      res.status(201).json({ savedUser: newUser, message: "Created" });
+    } else {
+      return res.status(500).json({
+        message: "Email must be of the formart example@email.com and pwd  atleast1numberspeci@lcharactorandCapital"
+      });
     }
   } catch (err) {
     res.status(400);
@@ -82,25 +97,17 @@ router.patch("/:userId", checkAuthentication, async (req, res) => {
     const { username, email, password } = req.body;
     const exists = await User.findById(req.params.userId);
     if (exists) {
-      hashedPwd = await bcrypt.hash(password, 12, (err, hash) => {
-        if (err) {
-          return res.status(500).json({
-            message: `the error :${err}`
-          });
-        } else {
-          User.updateOne(
-            { _id: req.params.userId },
-            {
-              $set: {
-                username,
-                email,
-                password: hash
-              }
-            }
-          );
-          res.status(200).json({ message: "Edited" });
+      User.updateOne(
+        { _id: req.params.userId },
+        {
+          $set: {
+            username,
+            email,
+            password
+          }
         }
-      });
+      );
+      res.status(200).json({ message: "Edited" });
     } else {
       res.json({ message: `sorry, user :${req.params.userId} was not found` });
     }

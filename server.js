@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const logger = require("morgan");
 require("dotenv/config");
+const passport = require("passport");
 
 //module imports
 // routes imports
@@ -18,6 +19,7 @@ const pwdResetRoutes = require("./Routes/users/pwdReset/passwordReset");
 const app = express();
 
 //middlewares
+app.use(passport.initialize());
 app.use("/uploads", express.static("uploads"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

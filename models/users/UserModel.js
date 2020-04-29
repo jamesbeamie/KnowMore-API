@@ -1,21 +1,56 @@
-let mongoose = require("mongoose");
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
-// Posts Schema
+// User Schema
 
-let userSchema = mongoose.Schema({
+const userSchema = mongoose.Schema({
   username: {
     type: String,
-    required: true,
   },
   email: {
     type: String,
-    required: true,
   },
   password: {
     type: String,
+  },
+  facebook: {
+    id: {
+      type: String,
+    },
+    username: {
+      type: String,
+    },
+    email: {
+      type: String,
+    },
+  },
+  google: {
+    id: {
+      type: String,
+    },
+    username: {
+      type: String,
+    },
+    email: {
+      type: String,
+    },
+  },
     required: true,
   },
   verificationTkn: { type: String },
 });
 
+// hash password before save
+userSchema.pre("save", async function (next) {
+  try {
+    if (!this.password) next();
+    if (!this.isModified("password")) next();// only hash if password is modified
+    const salt = await bcrypt.genSalt(12);
+    const hash = await bcrypt.hash(this.password, salt);
+    this.password = hash;
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
 module.exports = mongoose.model("User", userSchema);
