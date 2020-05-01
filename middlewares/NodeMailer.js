@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const mailSender = async (emailToSendTo, tkn) => {
+const mailSender = async (emailToSendTo, tkn, linkIdentifier) => {
   // create reusable transporter object
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -9,14 +9,15 @@ const mailSender = async (emailToSendTo, tkn) => {
     },
   });
 
+  const emailBody = messageHandler(tkn, linkIdentifier);
+  console.log("emailBody", emailBody);
+
   const mailOptions = {
     from: `${process.env.APP_EMAIL}`,
     to: emailToSendTo,
     subject: "Device Zone password reset ✔",
     // a link to a front-end route that consumes reset route
-    html: `<b>Click the link below to reset your Device Zone's password</b>
-    <br>
-    <p>${process.env.CLIENT_URL}/pwdreset/reset/${tkn}</P>
+    html: `${emailBody}
     `,
   };
 
@@ -27,6 +28,19 @@ const mailSender = async (emailToSendTo, tkn) => {
       return info;
     }
   });
+};
+
+const messageHandler = (tkn, linkID) => {
+  if (linkID === "pwdReset") {
+    return ` <b>Click the link below to reset your Device Zone's password</b>
+    <br>
+    <p> ${process.env.CLIENT_URL}/pwdreset/reset/${tkn}</P>`;
+  } else if (linkID === "activation") {
+    return ` <b>Click the link below to activate your Device Zone's Account</b>
+    <br>
+    <p> ${process.env.CLIENT_URL}/authentication/activate/${tkn}</P>`;
+  }
+  return "Nothing";
 };
 
 module.exports = mailSender;
