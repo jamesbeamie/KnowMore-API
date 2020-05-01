@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-
 // User Schema
 
 const userSchema = mongoose.Schema({
@@ -39,6 +38,7 @@ const userSchema = mongoose.Schema({
       type: String,
     },
   },
+  favorites: [mongoose.Schema.Types.ObjectId],
   verificationTkn: { type: String },
 });
 
