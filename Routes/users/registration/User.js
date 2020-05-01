@@ -1,16 +1,18 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const checkAuthentication = require("../../../middlewares/AuthMiddleware");
+const mailSender = require("../../../middlewares/NodeMailer");
 
 const User = require("../../../models/users/UserModel");
 
-const validEmail = email => {
+const validEmail = (email) => {
   let regx = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return regx.test(email);
 };
 
-const validPwd = pwd => {
+const validPwd = (pwd) => {
   var re = /^(?=.*[a-z]){3,}(?=.*[A-Z]){2,}(?=.*[0-9]){2,}(?=.*[!@#$%^&*()--__+.]){1,}.{8,}$/;
   return re.test(pwd);
 };
@@ -26,10 +28,7 @@ router.post("/signup", async (req, res) => {
     }
     // check if email matches any other in db
     exists = await User.findOne({
-      $or: [
-        { "facebook.email": email },
-        { "google.email": email },
-      ],
+      $or: [{ "facebook.email": email }, { "google.email": email }],
     });
     if (exists) {
       // add the data to user info
@@ -40,10 +39,12 @@ router.post("/signup", async (req, res) => {
           password,
         };
         await exists.save();
-        res.status(200).json({ savedUser: exists, message: "User info updated" });
+        res
+          .status(200)
+          .json({ savedUser: exists, message: "User info updated" });
       } else {
         return res.status(500).json({
-          message: `Email must be of the formart example@email.com and pwd  atleast1numberspeci@lcharactorandCapital`
+          message: `Email must be of the formart example@email.com and pwd  atleast1numberspeci@lcharactorandCapital`,
         });
       }
     }
@@ -55,10 +56,24 @@ router.post("/signup", async (req, res) => {
         password,
       });
       await newUser.save();
+
+      // generate a verification token to attach to the activation link
+      const token = jwt.sign({ email }, process.env.JWT_SECRETE_KEY, {
+        expiresIn: "1hr",
+      });
+      await User.updateOne(
+        {
+          email,
+        },
+        { $set: { verificationTkn: token } }
+      );
+      const linkFor = "activation";
+      await mailSender(email, token, linkFor);
       res.status(201).json({ savedUser: newUser, message: "Created" });
     } else {
       return res.status(500).json({
-        message: "Email must be of the formart example@email.com and pwd  atleast1numberspeci@lcharactorandCapital"
+        message:
+          "Email must be of the formart example@email.com and pwd  atleast1numberspeci@lcharactorandCapital",
       });
     }
   } catch (err) {
@@ -103,8 +118,8 @@ router.patch("/:userId", checkAuthentication, async (req, res) => {
           $set: {
             username,
             email,
-            password
-          }
+            password,
+          },
         }
       );
       res.status(200).json({ message: "Edited" });
@@ -128,6 +143,47 @@ router.delete("/:userId", checkAuthentication, async (req, res) => {
     }
   } catch (err) {
     res.json({ message: `Error deleting :${req.params.userId}` });
+  }
+});
+
+// activate account
+router.post("/activate/:verificationToken", async (req, res) => {
+  try {
+    // get the token from the link in the email
+    const token = req.params.verificationToken;
+    if (!token) {
+      res.json({ message: "You are not verified" });
+    }
+    const verifiedUser = await User.findOne({
+      verificationTkn: token,
+    });
+
+    if (verifiedUser) {
+      // update user status to active
+      verifiedUser.active = true;
+
+      // destroy the verification token after activating a user
+      await User.updateOne(
+        {
+          verificationTkn: token,
+        },
+        { $set: { verificationTkn: null } }
+      );
+      await verifiedUser.save();
+
+      res.status(200).json({
+        message: "You have activated your account",
+        verifiedUser,
+      });
+    } else {
+      res.json({
+        message: "You cannot activate your account before you are verified",
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      message: "Problem activating",
+    });
   }
 });
 module.exports = router;

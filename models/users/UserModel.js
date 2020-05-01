@@ -3,6 +3,10 @@ const bcrypt = require("bcrypt");
 // User Schema
 
 const userSchema = mongoose.Schema({
+  active: {
+    type: String,
+    default: false,
+  },
   username: {
     type: String,
   },
@@ -33,9 +37,9 @@ const userSchema = mongoose.Schema({
     email: {
       type: String,
     },
-    verificationTkn: { type: String },
   },
   favorites: [mongoose.Schema.Types.ObjectId],
+  verificationTkn: { type: String },
 });
 
 // hash password before save

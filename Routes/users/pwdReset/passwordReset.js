@@ -21,7 +21,9 @@ router.post("/request", async (req, res) => {
         },
         { $set: { verificationTkn: token } }
       );
-      await mailSender(email, token);
+
+      const linkFor = "pwdReset";
+      await mailSender(email, token, linkFor);
       res.json({
         message: `A password reset link has been send to ${email}. Check to reset password`,
       });
