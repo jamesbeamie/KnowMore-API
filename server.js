@@ -15,7 +15,7 @@ const ratingRoutes = require("./Routes/rating/Rating");
 const likeDislikeRoutes = require("./Routes/Devices/likeDislikeDevice");
 const reviewRoutes = require("./Routes/reviews/reviewsRoutes");
 const pwdResetRoutes = require("./Routes/users/pwdReset/passwordReset");
-const favouriteRoutes = require("./Routes/Devices/favouriteDevice")
+
 const app = express();
 
 //middlewares
@@ -34,7 +34,6 @@ app.use("/rating", ratingRoutes);
 app.use("/reviews", reviewRoutes);
 app.use("/liking", likeDislikeRoutes);
 app.use("/password-reset", pwdResetRoutes);
-app.use("/favourites", favouriteRoutes)
 
 // server
 mongoose
