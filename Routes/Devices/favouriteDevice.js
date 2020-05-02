@@ -6,16 +6,16 @@ const Device = require("../../models/devices/DevicesModel");
 const User = require('../../models/users/UserModel');
 const authMiddleware = require("../../middlewares/AuthMiddleware");
 
-router.get('/add/:userId/:deviceId', authMiddleware, async (req, res) => {
+router.get('/add/:deviceId', authMiddleware, async (req, res) => {
   try {
-    let user = await User.findById(req.params.userId);
-    let device = await Device.findById(req.params.deviceId);
+    let user = await User.findById(req.userData.id);
+    let device = await Device.findById(req.params.deviceId);   
     if(!user || !device) {
         res.status(500).json({
             message: "no data found",
         });
     }
-    user.favorites.push(req.params.deviceId);
+    user.favorites.push(device);
     await user.save();
     res.status(200).json({
         message: "Added favorite",
@@ -28,12 +28,12 @@ router.get('/add/:userId/:deviceId', authMiddleware, async (req, res) => {
 });
 
 // remove favorite
-router.get("/remove/:userId/:deviceId", authMiddleware, async (req, res) => {
+router.get("/remove/:deviceId", authMiddleware, async (req, res) => {
   try {
-    let user = await User.findById(req.params.userId);
+    let user = await User.findById(req.userData.id);
     let device = await Device.findById(req.params.deviceId);
     if(!user || !device) {
-      res.status(500).json({
+      res.status(400).json({
         message: "no data found",
       });
     }
@@ -60,12 +60,7 @@ router.get("/get/:userId", async (req, res) => {
       message: "user not found"
       });
     }
-    let gotFavorites = [];
-    const favorites = user.favorites;
-    for (const  elem of favorites) {
-      let device = await Device.findById(elem);
-      gotFavorites.push(device);
-    };
+    let gotFavorites = await User.findById(req.params.userId).populate("favourites")
     res.json({
       message: "Retrieved favorites",
       favorites: gotFavorites,

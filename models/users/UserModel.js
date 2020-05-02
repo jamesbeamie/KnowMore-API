@@ -38,7 +38,7 @@ const userSchema = mongoose.Schema({
       type: String,
     },
   },
-  favorites: [mongoose.Schema.Types.ObjectId],
+  favorites: [{type: mongoose.Schema.Types.ObjectId, ref: "Device"}],
   verificationTkn: { type: String },
 });
 
