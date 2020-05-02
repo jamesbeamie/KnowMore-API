@@ -21,11 +21,11 @@ let deviceSchema = new Schema({
     required: true,
   },
   productionYear: {
-    type: Number,
+    type: String,
     required: true,
   },
   price: {
-    type: Number,
+    type: String,
     required: true,
   },
   deviceImage: {

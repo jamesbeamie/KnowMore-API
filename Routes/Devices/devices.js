@@ -6,10 +6,27 @@ const checkAuthentication = require("../../middlewares/AuthMiddleware");
 const uploadImage = require("../../middlewares/ImageUploader");
 
 // Get all devices
-router.get("/", async (req, res) => {
+router.get("/:filters", async (req, res) => {
   try {
-    const devices = await Device.find().populate(" reviews");
-    res.json(devices);
+    const filter = req.params.filters;
+    // return all devices
+    if (filter === "default") {
+      const devices = await Device.find().populate(" reviews");
+      res.json(devices);
+    } else {
+      // return filtered devices
+      const filteredDevices = await Device.find({
+        $or: [
+          { name: filter },
+          { model: filter },
+          { size: filter },
+          { color: filter },
+          { tags: filter },
+          { productionYear: filter },
+        ],
+      });
+      res.json(filteredDevices);
+    }
   } catch (err) {
     res.json({ message: `sorry the errow :${err} occured` });
   }
