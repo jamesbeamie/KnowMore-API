@@ -60,12 +60,7 @@ router.get("/get/:userId", async (req, res) => {
       message: "user not found"
       });
     }
-    let gotFavorites = [];
-    const favorites = user.favorites;
-    for (const  elem of favorites) {
-      let device = await Device.findById(elem);
-      gotFavorites.push(device);
-    };
+    let gotFavorites = await User.findById(req.params.userId).populate("favourites")
     res.json({
       message: "Retrieved favorites",
       favorites: gotFavorites,
