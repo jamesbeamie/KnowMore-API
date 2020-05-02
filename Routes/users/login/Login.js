@@ -22,7 +22,7 @@ router.post("/login", async (req, res) => {
   const registered = await User.findOne({ email });
   try {
     if (registered) {
-      if (registered.active === "false") return res.status(401).json('Please activate your account to login');
+      if (registered.active === "false") return res.status(401).json({ message: "Please activate your account to login" });
       bcrypt.compare(password, registered.password, (err, result) => {
         if (err) {
           return res.status(401).json({ message: "Login Failed" });
