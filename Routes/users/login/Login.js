@@ -22,6 +22,7 @@ router.post("/login", async (req, res) => {
   const registered = await User.findOne({ email });
   try {
     if (registered) {
+      if (registered.active === "false") return res.status(401).json('Please activate your account to login');
       bcrypt.compare(password, registered.password, (err, result) => {
         if (err) {
           return res.status(401).json({ message: "Login Failed" });
@@ -59,8 +60,7 @@ router.get("/facebook/callback",
     res.json({
       accessToken,
     });
-  },
-);
+  });
 
 // login with google
 router.get("/google",
