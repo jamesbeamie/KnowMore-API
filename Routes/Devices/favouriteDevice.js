@@ -32,8 +32,8 @@ router.get("/remove/:deviceId", authMiddleware, async (req, res) => {
   try {
     let user = await User.findById(req.userData.id);
     let device = await Device.findById(req.params.deviceId);
-    if(!user || !device) {
-      res.status(400).json({
+    if (!user || !device) {
+      return res.status(400).json({
         message: "no data found",
       });
     }
@@ -56,11 +56,12 @@ router.get("/get/:userId", async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
     if (!user) {
-      res.status(500).json({
+      return res.status(500).json({
         message: "user not found"
       });
     }
-    let gotFavorites = await User.findById(req.params.userId).populate("favourites")
+    const gotFavorites = await User.findById(user.id)
+      .populate({ path: "favorites", populate: { path: "reviews" } });
     res.json({
       message: "Retrieved favorites",
       favorites: gotFavorites,
