@@ -15,6 +15,11 @@ router.get('/add/:deviceId', authMiddleware, async (req, res) => {
         message: "no data found",
       });
     }
+    // check if device is already in favorites
+    const added = user.favorites.includes(device.id);
+    if (added) {
+      return res.json({ message: "Decice already added to favorites" });
+    }
     user.favorites.push(device);
     await user.save();
     res.status(200).json({
