@@ -23,7 +23,8 @@ router.post("/request", async (req, res) => {
       );
 
       const linkFor = "pwdReset";
-      await mailSender(email, token, linkFor);
+      const subject = "Device Zone password reset ✔"
+      await mailSender(email, token, linkFor, subject);
       res.json({
         message: `A password reset link has been send to ${email}. Check to reset password`,
       });
