@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const mailSender = async (emailToSendTo, tkn, linkIdentifier) => {
+const mailSender = async (emailToSendTo, tkn, linkIdentifier, subject) => {
   // create reusable transporter object
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -15,7 +15,7 @@ const mailSender = async (emailToSendTo, tkn, linkIdentifier) => {
   const mailOptions = {
     from: `${process.env.APP_EMAIL}`,
     to: emailToSendTo,
-    subject: "Device Zone password reset ✔",
+    subject: `${subject}`,
     // a link to a front-end route that consumes reset route
     html: `${emailBody}
     `,
@@ -39,6 +39,10 @@ const messageHandler = (tkn, linkID) => {
     return ` <b>Click the link below to activate your Device Zone's Account</b>
     <br>
     <p> ${process.env.CLIENT_URL}/authentication/activate/${tkn}</P>`;
+  } else if (linkID ==="invite") {
+    return ` <b>You have been invited to Know More</b>
+    <br>
+    <p> ${process.env.CLIENT_URL}</P>`;
   }
   return "Nothing";
 };
