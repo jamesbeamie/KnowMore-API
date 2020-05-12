@@ -16,6 +16,7 @@ const likeDislikeRoutes = require("./Routes/Devices/likeDislikeDevice");
 const reviewRoutes = require("./Routes/reviews/reviewsRoutes");
 const pwdResetRoutes = require("./Routes/users/pwdReset/passwordReset");
 const favouriteRoutes = require("./Routes/Devices/favouriteDevice");
+const inviteRoutes = require("./Routes/invite/invite");
 
 // initialize app
 const app = express();
@@ -37,6 +38,7 @@ app.use("/reviews", reviewRoutes);
 app.use("/liking", likeDislikeRoutes);
 app.use("/password-reset", pwdResetRoutes);
 app.use("/favourites", favouriteRoutes);
+app.use("/", inviteRoutes);
 
 // server
 mongoose
