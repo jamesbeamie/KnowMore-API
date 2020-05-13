@@ -1,9 +1,9 @@
 const router = require("express").Router();
 
-const mailSender = require("../../../middlewares/NodeMailer");
+const mailSender = require("../../middlewares/NodeMailer");
 const authMiddleware = require("../../middlewares/AuthMiddleware");
 
-router.post('invite', authMiddleware, async (req, res) => {
+router.post("/", authMiddleware, async (req, res) => {
   try {
     if (!req.body.email) {
       return res.json({
@@ -12,8 +12,8 @@ router.post('invite', authMiddleware, async (req, res) => {
     }
     const { email } = req.body;
     const linkFor = "invite";
-    const token = ""
-    const subject = "Know More Invite"
+    const token = "";
+    const subject = "Know More Invite";
     await mailSender(email, token, linkFor);
     res.json({
       message: `An invitation link has been sent to ${email}.`,

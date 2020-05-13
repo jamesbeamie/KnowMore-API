@@ -10,7 +10,6 @@ const mailSender = async (emailToSendTo, tkn, linkIdentifier, subject) => {
   });
 
   const emailBody = messageHandler(tkn, linkIdentifier);
-  console.log("emailBody", emailBody);
 
   const mailOptions = {
     from: `${process.env.APP_EMAIL}`,
@@ -39,7 +38,7 @@ const messageHandler = (tkn, linkID) => {
     return ` <b>Click the link below to activate your Device Zone's Account</b>
     <br>
     <p> ${process.env.CLIENT_URL}/authentication/activate/${tkn}</P>`;
-  } else if (linkID ==="invite") {
+  } else if (linkID === "invite") {
     return ` <b>You have been invited to Know More</b>
     <br>
     <p> ${process.env.CLIENT_URL}</P>`;

@@ -38,7 +38,7 @@ app.use("/reviews", reviewRoutes);
 app.use("/liking", likeDislikeRoutes);
 app.use("/password-reset", pwdResetRoutes);
 app.use("/favourites", favouriteRoutes);
-app.use("/", inviteRoutes);
+app.use("/invite", inviteRoutes);
 
 // server
 mongoose
