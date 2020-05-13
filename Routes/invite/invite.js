@@ -13,7 +13,6 @@ router.post("/", authMiddleware, async (req, res) => {
     const { email } = req.body;
     const linkFor = "invite";
     const token = "";
-    const subject = "Know More Invite";
     await mailSender(email, token, linkFor);
     res.json({
       message: `An invitation link has been sent to ${email}.`,
