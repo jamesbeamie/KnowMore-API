@@ -1,11 +1,12 @@
+const passport = require("passport");
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-require("dotenv/config");
-const passport = require("passport");
-require("../../../config/passportConfig")(passport);
-const User = require("../../../models/users/UserModel");
+require("../config/passportConfig")(passport);
+const { userLogin } = require("../controllers/authController/loginHandler");
+
+// Login route
+router.post("/login", userLogin);
 
 // sign token
 const signToken = (user) =>

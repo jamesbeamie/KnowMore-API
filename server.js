@@ -17,6 +17,8 @@ const reviewRoutes = require("./Routes/reviews/reviewsRoutes");
 const pwdResetRoutes = require("./Routes/users/pwdReset/passwordReset");
 const favouriteRoutes = require("./Routes/Devices/favouriteDevice");
 const inviteRoutes = require("./Routes/invite/invite");
+// refactored routes with versioning
+const apiRoutes = require("./Routes");
 
 // initialize app
 const app = express();
@@ -39,6 +41,8 @@ app.use("/liking", likeDislikeRoutes);
 app.use("/password-reset", pwdResetRoutes);
 app.use("/favourites", favouriteRoutes);
 app.use("/invite", inviteRoutes);
+// Versioned
+app.use("/api/V1", apiRoutes);
 
 // server
 mongoose
