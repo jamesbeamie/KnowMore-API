@@ -3,6 +3,8 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const checkAuthentication = require("../middlewares/AuthMiddleware");
+
+const uploadImage = require("../middlewares/ImageUploader");
 require("../config/passportConfig")(passport);
 const { userLogin } = require("../controllers/authController/loginHandler");
 const {
@@ -18,7 +20,13 @@ const {
   updateUser,
   deleteAccount,
 } = require("../controllers/authController/signUpHandler");
-
+const {
+  allDevices,
+  createDevice,
+  specificDevice,
+  deleteDevice,
+  updateDevice,
+} = require("../controllers/deviceControllers/deviceHandler");
 // Login route
 router.post("/login", userLogin);
 // pwd reset
@@ -43,7 +51,30 @@ router.delete("/users/:userId", checkAuthentication, deleteAccount);
 
 // activate account
 router.post("/users/activate/:verificationToken", activateUser);
+// Get all devices
+router.get("/devices/:filters", allDevices);
 
+// add a device
+router.post(
+  "/devices/add",
+  uploadImage.single("deviceImage"),
+  checkAuthentication,
+  createDevice
+);
+
+// get a specific device
+router.get("/devices/specific/:deviceId", specificDevice);
+
+//delete a device
+router.delete("/devices/delete/:deviceId", checkAuthentication, deleteDevice);
+
+// Edit device
+router.patch(
+  "/devices/edit/:deviceId",
+  uploadImage.single("deviceImage"),
+  checkAuthentication,
+  updateDevice
+);
 // sign token
 const signToken = (user) =>
   jwt.sign({ id: user.id }, process.env.JWT_SECRETE_KEY, {
