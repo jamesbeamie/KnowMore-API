@@ -2,12 +2,22 @@ const passport = require("passport");
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
+const checkAuthentication = require("../middlewares/AuthMiddleware");
 require("../config/passportConfig")(passport);
 const { userLogin } = require("../controllers/authController/loginHandler");
 const {
   sendResetLink,
   updatePwd,
 } = require("../controllers/authController/pwdResetHandler");
+
+const {
+  registerUser,
+  activateUser,
+  fetchUsers,
+  specificUser,
+  updateUser,
+  deleteAccount,
+} = require("../controllers/authController/signUpHandler");
 
 // Login route
 router.post("/login", userLogin);
@@ -16,6 +26,23 @@ router.post("/login", userLogin);
 router.post("/reset-request", sendResetLink);
 // change password
 router.post("/reset/:verificationTkn", updatePwd);
+// creating user
+router.post("/users/signup", registerUser);
+
+// get all users
+router.get("/users", fetchUsers);
+
+// get a specific user
+router.get("/users/:userId", checkAuthentication, specificUser);
+
+// Edit User
+router.patch("/users/:userId", checkAuthentication, updateUser);
+
+// delete user
+router.delete("/users/:userId", checkAuthentication, deleteAccount);
+
+// activate account
+router.post("/users/activate/:verificationToken", activateUser);
 
 // sign token
 const signToken = (user) =>
