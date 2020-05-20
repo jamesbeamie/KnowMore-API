@@ -32,15 +32,15 @@ app.use(cors());
 app.use(logger("dev"));
 
 // routes
-app.use("/devices", devicesRoutes);
-app.use("/users", userRoutes);
-app.use("/auth", loginRoutes);
-app.use("/rating", ratingRoutes);
-app.use("/reviews", reviewRoutes);
-app.use("/liking", likeDislikeRoutes);
-app.use("/password-reset", pwdResetRoutes);
-app.use("/favourites", favouriteRoutes);
-app.use("/invite", inviteRoutes);
+// app.use("/devices", devicesRoutes);
+// app.use("/users", userRoutes);
+// app.use("/auth", loginRoutes);
+// app.use("/rating", ratingRoutes);
+// app.use("/reviews", reviewRoutes);
+// app.use("/liking", likeDislikeRoutes);
+// app.use("/password-reset", pwdResetRoutes);
+// app.use("/favourites", favouriteRoutes);
+// app.use("/invite", inviteRoutes);
 // Versioned
 app.use("/api/V1", apiRoutes);
 

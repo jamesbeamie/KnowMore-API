@@ -4,9 +4,18 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 require("../config/passportConfig")(passport);
 const { userLogin } = require("../controllers/authController/loginHandler");
+const {
+  sendResetLink,
+  updatePwd,
+} = require("../controllers/authController/pwdResetHandler");
 
 // Login route
 router.post("/login", userLogin);
+// pwd reset
+// sending the link to the email
+router.post("/reset-request", sendResetLink);
+// change password
+router.post("/reset/:verificationTkn", updatePwd);
 
 // sign token
 const signToken = (user) =>
