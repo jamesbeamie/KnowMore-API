@@ -1,11 +1,7 @@
-const express = require("express");
-
-const router = express.Router();
-
 const Rating = require("../../models/devices/RatingModel");
 
-// rate device
-router.post("/", async (req, res) => {
+// rating a device
+const rateDevice = async (req, res) => {
   const { RateValue } = req.body;
   const rated = new Rating({
     RateValue,
@@ -17,18 +13,11 @@ router.post("/", async (req, res) => {
   } catch (err) {
     res.json({ message: "Error rating a device" });
   }
-});
+};
 
-// get rating
-router.get("/", async (req, res) => {
-  try {
-    const ratings = await Rating.find();
-    res.json(ratings);
-  } catch (err) {
-    res.json({ message: `sorry the error :${err} occured` });
-  }
-});
-router.delete("/:theId", async (req, res) => {
+// undo rating
+
+const undoRating = async (req, res) => {
   try {
     // const ratings = await Rating.findById(req.params.theId);
     const deleted = await Rating.remove({ _id: req.params.theId });
@@ -36,6 +25,5 @@ router.delete("/:theId", async (req, res) => {
   } catch (err) {
     res.json({ message: `sorry the error :${err} occured` });
   }
-});
-
-module.exports = router;
+};
+module.exports = { rateDevice, undoRating };

@@ -37,7 +37,18 @@ const {
   unFavorite,
   myFavorites,
 } = require("../controllers/favoritesController/favoritesHandler");
-
+const {
+  sendEmailInvite,
+} = require("../controllers/authController/inviteHandler");
+const {
+  rateDevice,
+  undoRating,
+} = require("../controllers/ratingController/ratingHandler");
+const {
+  addReview,
+  editReview,
+  deleteReview,
+} = require("../controllers/reviewsController/reviewHandler");
 // Login route
 router.post("/login", userLogin);
 // pwd reset
@@ -47,7 +58,8 @@ router.post("/reset-request", sendResetLink);
 router.post("/reset/:verificationTkn", updatePwd);
 // creating user
 router.post("/users/signup", registerUser);
-
+//invite users
+router.post("/users/invite", checkAuthentication, sendEmailInvite);
 // get all users
 router.get("/users", fetchUsers);
 
@@ -64,6 +76,9 @@ router.delete("/users/:userId", checkAuthentication, deleteAccount);
 router.post("/users/activate/:verificationToken", activateUser);
 // Get all devices
 router.get("/devices/:filters", allDevices);
+// rate device
+router.post("/rate", rateDevice);
+router.delete("/:theId", undoRating);
 
 // add a device
 router.post(
@@ -98,7 +113,13 @@ router.get("/favorite/:deviceId", checkAuthentication, addFavorite);
 router.get("/remove-favorite/:deviceId", checkAuthentication, unFavorite);
 // get all favorites for a given user
 router.get("/my-favorites/:userId", myFavorites);
-
+// reviews
+// create review
+router.post("/review/:deviceId", checkAuthentication, addReview);
+// edit review
+router.patch("/update-review/:reviewId", editReview);
+//delete a review
+router.delete("/delete-review/:reviewId", checkAuthentication, deleteReview);
 // sign token
 const signToken = (user) =>
   jwt.sign({ id: user.id }, process.env.JWT_SECRETE_KEY, {
