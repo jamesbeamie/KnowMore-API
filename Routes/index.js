@@ -27,6 +27,12 @@ const {
   deleteDevice,
   updateDevice,
 } = require("../controllers/deviceControllers/deviceHandler");
+const {
+  postLike,
+  dislikeDevice,
+  removeDislike,
+} = require("../controllers/likesController/likesHandler");
+
 // Login route
 router.post("/login", userLogin);
 // pwd reset
@@ -75,6 +81,14 @@ router.patch(
   checkAuthentication,
   updateDevice
 );
+
+// likes
+router.post("/like/:deviceId", checkAuthentication, postLike);
+// dislike
+router.post("/dislike/:deviceId", checkAuthentication, dislikeDevice);
+// remove dislike - when a user "unclicks" the dislike button
+router.post("/remove-dislike/:deviceId", checkAuthentication, removeDislike);
+
 // sign token
 const signToken = (user) =>
   jwt.sign({ id: user.id }, process.env.JWT_SECRETE_KEY, {
