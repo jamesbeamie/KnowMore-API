@@ -32,6 +32,11 @@ const {
   dislikeDevice,
   removeDislike,
 } = require("../controllers/likesController/likesHandler");
+const {
+  addFavorite,
+  unFavorite,
+  myFavorites,
+} = require("../controllers/favoritesController/favoritesHandler");
 
 // Login route
 router.post("/login", userLogin);
@@ -88,6 +93,11 @@ router.post("/like/:deviceId", checkAuthentication, postLike);
 router.post("/dislike/:deviceId", checkAuthentication, dislikeDevice);
 // remove dislike - when a user "unclicks" the dislike button
 router.post("/remove-dislike/:deviceId", checkAuthentication, removeDislike);
+router.get("/favorite/:deviceId", checkAuthentication, addFavorite);
+// remove favorite
+router.get("/remove-favorite/:deviceId", checkAuthentication, unFavorite);
+// get all favorites for a given user
+router.get("/my-favorites/:userId", myFavorites);
 
 // sign token
 const signToken = (user) =>
