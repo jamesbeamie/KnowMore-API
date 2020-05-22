@@ -1,6 +1,5 @@
 const Device = require("../../models/devices/DevicesModel");
 const User = require("../../models/users/UserModel");
-const authMiddleware = require("../../middlewares/AuthMiddleware");
 
 // favorite a device
 
@@ -9,19 +8,19 @@ const addFavorite = async (req, res) => {
     let user = await User.findById(req.userData.id);
     let device = await Device.findById(req.params.deviceId);
     if (!user || !device) {
-      return res.status(500).json({
+      return res.status(404).json({
         message: "no data found",
       });
     }
     // check if device is already in favorites
     const added = user.favorites.includes(device.id);
     if (added) {
-      return res.json({ message: "Decice already added to favorites" });
+      return res.json({ message: "Device already added to favorites" });
     }
     user.favorites.push(device);
     await user.save();
     res.status(200).json({
-      message: "Added favorite",
+      message: "Added to favorite",
     });
   } catch (error) {
     res.status(500).json({

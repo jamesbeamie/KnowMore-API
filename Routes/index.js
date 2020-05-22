@@ -49,6 +49,10 @@ const {
   editReview,
   deleteReview,
 } = require("../controllers/reviewsController/reviewHandler");
+const {
+  subscribeToDevice,
+  unSubscribe,
+} = require("../controllers/subscriptionController/subscriptionHandler");
 // Login route
 router.post("/login", userLogin);
 // pwd reset
@@ -62,16 +66,12 @@ router.post("/users/signup", registerUser);
 router.post("/users/invite", checkAuthentication, sendEmailInvite);
 // get all users
 router.get("/users", fetchUsers);
-
 // get a specific user
 router.get("/users/:userId", checkAuthentication, specificUser);
-
 // Edit User
 router.patch("/users/:userId", checkAuthentication, updateUser);
-
 // delete user
 router.delete("/users/:userId", checkAuthentication, deleteAccount);
-
 // activate account
 router.post("/users/activate/:verificationToken", activateUser);
 // Get all devices
@@ -79,7 +79,6 @@ router.get("/devices/:filters", allDevices);
 // rate device
 router.post("/rate", rateDevice);
 router.delete("/:theId", undoRating);
-
 // add a device
 router.post(
   "/devices/add",
@@ -87,13 +86,10 @@ router.post(
   checkAuthentication,
   createDevice
 );
-
 // get a specific device
 router.get("/devices/specific/:deviceId", specificDevice);
-
 //delete a device
 router.delete("/devices/delete/:deviceId", checkAuthentication, deleteDevice);
-
 // Edit device
 router.patch(
   "/devices/edit/:deviceId",
@@ -101,7 +97,6 @@ router.patch(
   checkAuthentication,
   updateDevice
 );
-
 // likes
 router.post("/like/:deviceId", checkAuthentication, postLike);
 // dislike
@@ -120,6 +115,8 @@ router.post("/review/:deviceId", checkAuthentication, addReview);
 router.patch("/update-review/:reviewId", editReview);
 //delete a review
 router.delete("/delete-review/:reviewId", checkAuthentication, deleteReview);
+router.get("/subscribe/:deviceId", checkAuthentication, subscribeToDevice);
+router.get("/unsubscribe/:deviceId", checkAuthentication, unSubscribe);
 // sign token
 const signToken = (user) =>
   jwt.sign({ id: user.id }, process.env.JWT_SECRETE_KEY, {
