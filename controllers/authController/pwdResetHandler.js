@@ -1,12 +1,10 @@
-const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const mailSender = require("../../../middlewares/NodeMailer");
+const mailSender = require("../../middlewares/NodeMailer");
+const User = require("../../models/users/UserModel");
 
-const User = require("../../../models/users/UserModel");
-
-// sending the link to the email
-router.post("/request", async (req, res) => {
+// send email
+const sendResetLink = async (req, res) => {
   try {
     const { email } = req.body;
     const exists = await User.find({ email });
@@ -23,7 +21,7 @@ router.post("/request", async (req, res) => {
       );
 
       const linkFor = "pwdReset";
-      const subject = "Device Zone password reset ✔"
+      const subject = "Device Zone password reset ✔";
       await mailSender(email, token, linkFor, subject);
       res.json({
         message: `A password reset link has been send to ${email}. Check to reset password`,
@@ -34,10 +32,10 @@ router.post("/request", async (req, res) => {
   } catch {
     res.json({ message: "There was a problem sending the link" });
   }
-});
+};
 
-// change password
-router.post("/reset/:verificationTkn", async (req, res) => {
+// update password
+const updatePwd = async (req, res) => {
   try {
     const { password } = req.body;
     const hashedPwd = await bcrypt.hash(password, 12);
@@ -54,5 +52,5 @@ router.post("/reset/:verificationTkn", async (req, res) => {
   } catch (err) {
     res.json({ message: "error updating user" });
   }
-});
-module.exports = router;
+};
+module.exports = { sendResetLink, updatePwd };

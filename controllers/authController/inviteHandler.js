@@ -1,9 +1,8 @@
-const router = require("express").Router();
-
 const mailSender = require("../../middlewares/NodeMailer");
-const authMiddleware = require("../../middlewares/AuthMiddleware");
 
-router.post("/", authMiddleware, async (req, res) => {
+// send invite
+
+const sendEmailInvite = async (req, res) => {
   try {
     if (!req.body.email) {
       return res.json({
@@ -22,6 +21,5 @@ router.post("/", authMiddleware, async (req, res) => {
       message: `An error occurred while sending an invitation link to ${req.body.email}`,
     });
   }
-});
-
-module.exports = router;
+};
+module.exports = { sendEmailInvite };
