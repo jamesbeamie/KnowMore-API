@@ -45,7 +45,7 @@ const messageHandler = (tkn, linkID) => {
   } else if (linkID === "Subscription") {
     return ` <b>A new device has been added to the device store</b>
     <br>
-    <p> ${process.env.CLIENT_URL}/${tkn}</P>`;
+    <p> ${process.env.CLIENT_URL}/front-end/url/to/devices</P>`;
   }
   return "Nothing";
 };

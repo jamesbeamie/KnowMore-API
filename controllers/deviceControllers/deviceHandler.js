@@ -37,7 +37,7 @@ const createDevice = async (req, res) => {
     },
     (err, user) => {
       const loyalUser = user.email;
-      const token = "front-end/url/to/devices";
+      const token = "";
       const linkFor = "Subscription";
       mailSender(loyalUser, token, linkFor);
     }
