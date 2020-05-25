@@ -19,7 +19,9 @@ const subscribeToDevice = async (req, res) => {
         message: "You already subscribed to notifications on this device",
       });
     }
+    // only subscribe to specific devices in future
     user.subscriptions.push(device);
+    user.subscribed = true;
     await user.save();
     res.status(200).json({
       message: "You have subscribed to notifications on this device",
@@ -50,6 +52,8 @@ const unSubscribe = async (req, res) => {
     user.subscriptions = user.subscriptions.filter((devices) => {
       devices !== device.id;
     });
+    await user.save();
+    user.subscribed = false;
     await user.save();
     res.status(200).json({
       message: "You have unsubscribed to notifications on this device",

@@ -1,5 +1,6 @@
 const Device = require("../../models/devices/DevicesModel");
-// const checkAuthentication = require("../../middlewares/AuthMiddleware");
+const User = require("../../models/users/UserModel");
+const mailSender = require("../../middlewares/NodeMailer");
 
 // get all devices
 const allDevices = async (req, res) => {
@@ -29,8 +30,18 @@ const allDevices = async (req, res) => {
 };
 // create a device
 const createDevice = async (req, res) => {
-  console.log(req.file);
   const { name, model, size, color, productionYear, price, tags } = req.body;
+  User.findOne(
+    {
+      subscribed: "true",
+    },
+    (err, user) => {
+      const loyalUser = user.email;
+      const token = "front-end/url/to/devices";
+      const linkFor = "Subscription";
+      mailSender(loyalUser, token, linkFor);
+    }
+  );
   const newDevice = new Device({
     name,
     model,
