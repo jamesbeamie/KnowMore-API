@@ -7,6 +7,10 @@ const userSchema = mongoose.Schema({
     type: String,
     default: false,
   },
+  subscribed: {
+    type: String,
+    default: false,
+  },
   username: {
     type: String,
   },

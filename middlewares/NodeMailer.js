@@ -39,9 +39,13 @@ const messageHandler = (tkn, linkID) => {
     <br>
     <p> ${process.env.CLIENT_URL}/authentication/activate/${tkn}</P>`;
   } else if (linkID === "invite") {
-    return ` <b>You have been invited to Know More</b>
+    return ` <b>You have been invited to Know More, click the link below to activate your account</b>
     <br>
-    <p> ${process.env.CLIENT_URL}</P>`;
+    <p> ${process.env.CLIENT_URL}/authentication/activate/>`;
+  } else if (linkID === "Subscription") {
+    return ` <b>A new device has been added to the device store</b>
+    <br>
+    <p> ${process.env.CLIENT_URL}/front-end/url/to/devices</P>`;
   }
   return "Nothing";
 };
