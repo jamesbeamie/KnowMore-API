@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server",
-    "dev": "nodemon server"
+    "dev": "nodemon server",
+    "test": "jest --config ./jest.config.json"
   },
   "repository": {
     "type": "git",
@@ -34,6 +35,7 @@
     "pug": "^2.0.4"
   },
   "devDependencies": {
+    "jest": "^26.0.1",
     "morgan": "^1.10.0"
   }
 }
